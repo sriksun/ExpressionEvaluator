@@ -36,12 +36,14 @@ namespace ExpressionEvaluator
 
         public Context ExportTypes(Type[] types)
         {
+            exportedTypes.Clear();
             exportedTypes.AddRange(types.ToList());
             return this;
         }
 
         public Context ExportTypes(List<Type> types)
         {
+            exportedTypes.Clear();
             exportedTypes.AddRange(types);
             return this;
         }

@@ -94,6 +94,7 @@ namespace ExpressionEvaluator
             evaluator = new ExpressionEvaluator(cExp);
             Func<DateTime> v3 = evaluator.Evaluate<DateTime>();
             Console.WriteLine(v3());
+
         }
     }
 }
