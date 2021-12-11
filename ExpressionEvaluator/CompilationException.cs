@@ -3,7 +3,7 @@ namespace ExpressionEvaluator
 {
     public class CompilationException : Exception
     {
-		CompilationException() : base()
+		public CompilationException() : base()
         {
         }
 

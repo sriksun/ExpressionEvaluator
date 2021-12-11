@@ -16,16 +16,16 @@ namespace ExpressionEvaluator
             this.context = context;
         }
 
-        private SyntaxTree ValidateExpression(string expression)
+        internal SyntaxTree ValidateExpression(string expression)
         {
             if (string.IsNullOrEmpty(expression) || string.IsNullOrWhiteSpace(expression))
-                throw new Exception("Expression cannot be empty or null");
+                throw new CompilationException("Expression cannot be empty or null");
 
             var tree = CSharpSyntaxTree.ParseText(expression, CSharpParseOptions.Default.WithKind(SourceCodeKind.Script));
             var diagnostics = tree.GetDiagnostics().ToList();
 
             if (diagnostics.Count > 0)
-                throw new Exception(diagnostics[0].ToString());
+                throw new CompilationException(diagnostics[0].ToString());
 
             return tree;
         }

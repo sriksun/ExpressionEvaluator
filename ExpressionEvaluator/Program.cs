@@ -67,7 +67,7 @@ namespace ExpressionEvaluator
             watch.Restart();
             for (int i = 0; i < 1000000; i++)
             {
-                string s = String.Concat(json["channel"]["item"][0]["title"].ToString().Substring(0, 8), i.ToString());
+                string s = string.Concat(json["channel"]["item"][0]["title"].ToString().Substring(0, 8), i.ToString());
             }
             Console.WriteLine(watch.ElapsedMilliseconds);
 
