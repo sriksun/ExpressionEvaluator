@@ -24,6 +24,11 @@ using System.Linq.Expressions;
 
 namespace ExpressionEvaluator
 {
+    /// <summary>
+    /// Expression evaluation state through which variable declaration and
+    /// type export are configured. <see cref="Context.DeclareVariable(string, Type)"/>
+    /// and <see cref="Context.ExportType(Type)"/>
+    /// </summary>
     public class Context
     {
         private List<ParameterExpression> variables = new List<ParameterExpression>();

@@ -24,7 +24,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ExpressionEvaluator.Transformer
 {
-    public class BinaryExpressionTransformer : Transformer<BinaryExpression, BinaryExpressionSyntax>
+    public class BinaryExpressionTransformer : IExpressionTransformer<BinaryExpression, BinaryExpressionSyntax>
     {
         public static BinaryExpressionTransformer INSTANCE = new BinaryExpressionTransformer();
 

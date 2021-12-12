@@ -21,7 +21,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ExpressionEvaluator.Transformer
 {
-    public class ParenthesizedExpressionTransformer : Transformer<Expression, ParenthesizedExpressionSyntax>
+    public class ParenthesizedExpressionTransformer : IExpressionTransformer<Expression, ParenthesizedExpressionSyntax>
     {
         public static ParenthesizedExpressionTransformer INSTANCE = new ParenthesizedExpressionTransformer();
 

@@ -24,7 +24,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ExpressionEvaluator.Transformer
 {
-    public class PrefixUnaryExpressionTransformer : Transformer<Expression, PrefixUnaryExpressionSyntax>
+    public class PrefixUnaryExpressionTransformer : IExpressionTransformer<Expression, PrefixUnaryExpressionSyntax>
     {
         public static PrefixUnaryExpressionTransformer INSTANCE = new PrefixUnaryExpressionTransformer();
 
@@ -57,6 +57,7 @@ namespace ExpressionEvaluator.Transformer
                     int delta = prefixSyntax.Kind() == SyntaxKind.PreDecrementExpression ? -1 : 1;
                     Expression lResult = Expression.Add(exp, Expression.Constant(delta));
                     Expression lResultObj = Expression.Convert(lResult, typeof(object));
+                    //Assignment to variable is achieved through update to concurrent dictionary holding all the variables
                     return Expression.Block(
                         Expression.Call(Expression.Constant(context.Variables()), tryUpdateMethod, Expression.Constant(varName), lResultObj, dictionaryAccess),
                         exp);

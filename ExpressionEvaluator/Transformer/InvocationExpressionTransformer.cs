@@ -25,7 +25,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ExpressionEvaluator.Transformer
 {
-    public class InvocationExpressionTransformer : Transformer<MethodCallExpression, InvocationExpressionSyntax>
+    public class InvocationExpressionTransformer : IExpressionTransformer<MethodCallExpression, InvocationExpressionSyntax>
     {
         public static InvocationExpressionTransformer INSTANCE = new InvocationExpressionTransformer();
 

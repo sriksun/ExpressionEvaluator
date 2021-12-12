@@ -20,6 +20,11 @@ using System.Linq.Expressions;
 
 namespace ExpressionEvaluator
 {
+    /// <summary>
+    /// Holds internal state of a compiled expression. Only a compiled
+    /// expression can be evaluated. ExpressionCompiler <see cref="ExpressionCompiler.Compile(string)"/>
+    /// is used to build a CompiledExpression object used for evalutation.
+    /// </summary>
     public class CompiledExpression
     {
         private readonly Context context;

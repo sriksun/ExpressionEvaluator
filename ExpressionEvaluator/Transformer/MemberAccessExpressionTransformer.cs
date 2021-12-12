@@ -24,7 +24,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ExpressionEvaluator.Transformer
 {
-    public class MemberAccessExpressionTransformer : Transformer<MemberExpression, MemberAccessExpressionSyntax>
+    public class MemberAccessExpressionTransformer : IExpressionTransformer<MemberExpression, MemberAccessExpressionSyntax>
     {
         public static MemberAccessExpressionTransformer INSTANCE = new MemberAccessExpressionTransformer();
 

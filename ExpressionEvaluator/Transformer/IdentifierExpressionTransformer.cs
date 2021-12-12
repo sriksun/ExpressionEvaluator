@@ -24,12 +24,15 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ExpressionEvaluator.Transformer
 {
-    public class IdentifierExpressionTransformer : Transformer<Expression, IdentifierNameSyntax>
+    public class IdentifierExpressionTransformer : IExpressionTransformer<Expression, IdentifierNameSyntax>
     {
         public static IdentifierExpressionTransformer INSTANCE = new IdentifierExpressionTransformer();
 
         public Expression ToExpression(Context context, IdentifierNameSyntax identifierSyntax)
         {
+            //Each variable is not created natively as a ParameterExpression in Linq.
+            //Instead, a single dictionary containing all variables are held.
+            //Access to variable is through Element access on the dictionary.
             string identifier = identifierSyntax.Identifier.ValueText;
             var param = context.VariableDeclarations().FirstOrDefault(v => v.Name == identifier);
 

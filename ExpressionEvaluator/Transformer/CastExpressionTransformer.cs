@@ -23,7 +23,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ExpressionEvaluator.Transformer
 {
-    public class CastExpressionTransformer : Transformer<Expression, CastExpressionSyntax>
+    public class CastExpressionTransformer : IExpressionTransformer<Expression, CastExpressionSyntax>
     {
         public static CastExpressionTransformer INSTANCE = new CastExpressionTransformer();
 

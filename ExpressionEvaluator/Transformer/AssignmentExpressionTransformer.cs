@@ -24,7 +24,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ExpressionEvaluator.Transformer
 {
-    public class AssignmentExpressionTransformer : Transformer<Expression, AssignmentExpressionSyntax>
+    public class AssignmentExpressionTransformer : IExpressionTransformer<Expression, AssignmentExpressionSyntax>
     {
         public static AssignmentExpressionTransformer INSTANCE = new AssignmentExpressionTransformer();
 
@@ -89,6 +89,7 @@ namespace ExpressionEvaluator.Transformer
                     lResult = rExp;
                     break;
             }
+            //Assignment to variable is achieved through update to concurrent dictionary holding all the variables
             Expression lResultObj = Expression.Convert(lResult, typeof(object));
             return Expression.Block(
                 Expression.Call(Expression.Constant(context.Variables()), tryUpdateMethod, Expression.Constant(varName), lResultObj, dictionaryAccess),

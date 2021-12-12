@@ -22,6 +22,21 @@ using System.Linq.Expressions;
 
 namespace ExpressionEvaluator
 {
+    /// <summary>
+    /// ExpressionEvaluator evaluates simple expressions in a performant fashion.
+    /// Evaluator compiles an expression, binds variables at evaluation time.
+    /// <see cref="ExpressionEvaluator.Evaluate{T}"/>
+    /// <code>
+    ///     Context context = new Context();
+    ///     context.DeclareVariable("a", typeof(int));
+    ///     CompiledExpression cExp = new ExpressionCompiler(context).Compile("a+=3");
+    ///     ExpressionEvaluator evaluator = new ExpressionEvaluator(cExp);
+    ///     evaluator.SetVariable("a", 5);
+    ///     Func<int> func = evaluator.Evaluate<int>();
+    ///     func();
+    /// </code>
+    /// Note: ExpressionEvalution is not thread-safe.
+    /// </summary>
     public class ExpressionEvaluator
     {
         private readonly Context context;

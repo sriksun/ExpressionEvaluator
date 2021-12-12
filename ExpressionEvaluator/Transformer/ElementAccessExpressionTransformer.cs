@@ -23,7 +23,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ExpressionEvaluator.Transformer
 {
-    public class ElementAccessExpressionTransformer : Transformer<Expression, ElementAccessExpressionSyntax>
+    public class ElementAccessExpressionTransformer : IExpressionTransformer<Expression, ElementAccessExpressionSyntax>
     {
         public static ElementAccessExpressionTransformer INSTANCE = new ElementAccessExpressionTransformer();
 

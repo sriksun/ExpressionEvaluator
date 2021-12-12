@@ -25,6 +25,11 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ExpressionEvaluator
 {
+    /// <summary>
+    /// Compiles an expression and returns a handle to CompiledExpression
+    /// <see cref="CompiledExpression"/>. This CompiledExpression can be evaluated
+    /// any number of times with different variable values, set before evaluation.
+    /// </summary>
     public class ExpressionCompiler
     {
         private readonly Context context;

@@ -25,7 +25,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ExpressionEvaluator.Transformer
 {
-    public class PostUnaryExpressionTransformer : Transformer<Expression, PostfixUnaryExpressionSyntax>
+    public class PostUnaryExpressionTransformer : IExpressionTransformer<Expression, PostfixUnaryExpressionSyntax>
     {
         public static PostUnaryExpressionTransformer INSTANCE = new PostUnaryExpressionTransformer();
 
@@ -60,6 +60,7 @@ namespace ExpressionEvaluator.Transformer
                     Expression lResultObj = Expression.Convert(lResult, typeof(object));
                     ParameterExpression tmpVar = Expression.Variable(dictionaryAccess.Type, "_tmp" + varName);
 
+                    //Assignment to variable is achieved through update to concurrent dictionary holding all the variables
                     return Expression.Block(
                         exp.Type,
                         new List<ParameterExpression>() { tmpVar },

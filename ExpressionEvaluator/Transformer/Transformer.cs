@@ -21,7 +21,13 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ExpressionEvaluator.Transformer
 {
-    public interface Transformer<A, B> where B : ExpressionSyntax where A : Expression
+    /// <summary>
+    /// Transforms a Roslyn CSharp Expression Syntax <see cref="ExpressionSyntax"/> to
+    /// corresponding Expression <see cref="Expression"/>
+    /// </summary>
+    /// <typeparam name="A">of type Expression <see cref="Expression"/></typeparam>
+    /// <typeparam name="B">of type Expression Syntax <see cref="ExpressionSyntax"/></typeparam>
+    public interface IExpressionTransformer<A, B> where B : ExpressionSyntax where A : Expression
     {
         A ToExpression(Context context, B expressionSyntax) ;
     }

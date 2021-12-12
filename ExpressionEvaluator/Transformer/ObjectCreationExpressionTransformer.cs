@@ -24,7 +24,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ExpressionEvaluator.Transformer
 {
-    public class ObjectCreationExpressionTransformer : Transformer<NewExpression, ObjectCreationExpressionSyntax>
+    public class ObjectCreationExpressionTransformer : IExpressionTransformer<NewExpression, ObjectCreationExpressionSyntax>
     {
         public static ObjectCreationExpressionTransformer INSTANCE = new ObjectCreationExpressionTransformer();
 

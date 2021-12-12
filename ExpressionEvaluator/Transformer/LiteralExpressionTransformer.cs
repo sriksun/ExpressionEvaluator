@@ -22,7 +22,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ExpressionEvaluator.Transformer
 {
-    public class LiteralExpressionTransformer : Transformer<ConstantExpression, LiteralExpressionSyntax>
+    public class LiteralExpressionTransformer : IExpressionTransformer<ConstantExpression, LiteralExpressionSyntax>
     {
         public static LiteralExpressionTransformer INSTANCE = new LiteralExpressionTransformer();
 

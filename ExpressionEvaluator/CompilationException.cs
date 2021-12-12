@@ -19,6 +19,9 @@
 using System;
 namespace ExpressionEvaluator
 {
+    /// <summary>
+    /// Exception encountered during compilation of script being evaluated.
+    /// </summary>
     public class CompilationException : Exception
     {
 		public CompilationException() : base()
