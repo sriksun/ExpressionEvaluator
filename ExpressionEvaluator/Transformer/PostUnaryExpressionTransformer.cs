@@ -55,7 +55,7 @@ namespace ExpressionEvaluator.Transformer
                     {
                         throw new CompilationException("Can't perform postfix inc/dec assignment" + postfixSyntax.Operand);
                     }
-                    int delta = postfixSyntax.Kind() == SyntaxKind.PreDecrementExpression ? -1 : 1;
+                    int delta = postfixSyntax.Kind() == SyntaxKind.PostDecrementExpression ? -1 : 1;
                     Expression lResult = Expression.Add(exp, Expression.Constant(delta));
                     Expression lResultObj = Expression.Convert(lResult, typeof(object));
                     ParameterExpression tmpVar = Expression.Variable(dictionaryAccess.Type, "_tmp" + varName);
