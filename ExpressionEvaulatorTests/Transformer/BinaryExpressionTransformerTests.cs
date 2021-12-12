@@ -280,7 +280,7 @@ namespace ExpressionEvaulatorTests.Transformer
 
             Context context = new Context();
             BinaryExpression cExp = BinaryExpressionTransformer.INSTANCE.ToExpression(context, binarySyntax);
-            Assert.AreEqual(cExp.NodeType, ExpressionType.NotEqual);
+            Assert.AreEqual(cExp.NodeType, ExpressionType.And);
             Assert.AreEqual(cExp.Type, typeof(bool));
         }
 
@@ -296,7 +296,7 @@ namespace ExpressionEvaulatorTests.Transformer
 
             Context context = new Context();
             BinaryExpression cExp = BinaryExpressionTransformer.INSTANCE.ToExpression(context, binarySyntax);
-            Assert.AreEqual(cExp.NodeType, ExpressionType.NotEqual);
+            Assert.AreEqual(cExp.NodeType, ExpressionType.Or);
             Assert.AreEqual(cExp.Type, typeof(bool));
         }
 

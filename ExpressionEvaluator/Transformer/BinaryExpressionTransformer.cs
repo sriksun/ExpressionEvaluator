@@ -64,11 +64,17 @@ namespace ExpressionEvaluator.Transformer
                 case SyntaxKind.GreaterThanOrEqualExpression:
                     return Expression.GreaterThanOrEqual(lExp, rExp);
                 case SyntaxKind.LogicalAndExpression:
-                    Expression rhs0 = ((lTypePrio + rTypePrio) > 0 ? Expression.Constant(0) : Expression.Constant(true));
-                    return Expression.NotEqual(Expression.And(lExp, rExp), rhs0);
+                    if ((lTypePrio + rTypePrio) > 0)
+                    {
+                        return Expression.NotEqual(Expression.And(lExp, rExp), Expression.Constant(0));
+                    }
+                    return Expression.And(lExp, rExp);
                 case SyntaxKind.LogicalOrExpression:
-                    Expression rhs1 = ((lTypePrio + rTypePrio) > 0 ? Expression.Constant(0) : Expression.Constant(true));
-                    return Expression.NotEqual(Expression.Or(lExp, rExp), rhs1);
+                    if ((lTypePrio + rTypePrio) > 0)
+                    {
+                        return Expression.NotEqual(Expression.Or(lExp, rExp), Expression.Constant(0));
+                    }
+                    return Expression.Or(lExp, rExp);
                 case SyntaxKind.CoalesceExpression:
                     return Expression.Coalesce(lExp, rExp);
                 case SyntaxKind.BitwiseAndExpression:
