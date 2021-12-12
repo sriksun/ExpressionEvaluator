@@ -18,5 +18,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="NSubstitute" />
+    <None Remove="Transformer\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Transformer\" />
   </ItemGroup>
 </Project>

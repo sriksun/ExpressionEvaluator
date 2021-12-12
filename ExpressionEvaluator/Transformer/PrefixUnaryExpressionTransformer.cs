@@ -15,9 +15,10 @@ namespace ExpressionEvaluator.Transformer
             switch (prefixSyntax.Kind())
             {
                 case SyntaxKind.PreIncrementExpression:
-                    return Expression.PreIncrementAssign(exp);
                 case SyntaxKind.PreDecrementExpression:
-                    return Expression.PreDecrementAssign(exp);
+                    throw new CompilationException("Prefix Increment/Decrement not supported" + prefixSyntax.Operand);
+                case SyntaxKind.BitwiseNotExpression:
+                    return Expression.Not(exp);
                 case SyntaxKind.LogicalNotExpression:
                     return Expression.Not(exp);
                 case SyntaxKind.UnaryMinusExpression:

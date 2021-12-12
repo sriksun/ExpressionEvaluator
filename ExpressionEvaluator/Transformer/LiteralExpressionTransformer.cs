@@ -38,7 +38,7 @@ namespace ExpressionEvaluator.Transformer
                 case SyntaxKind.TrueLiteralExpression:
                     return Expression.Constant(true, typeof(bool));
                 case SyntaxKind.FalseLiteralExpression:
-                    return Expression.Constant(true, typeof(bool));
+                    return Expression.Constant(false, typeof(bool));
                 case SyntaxKind.NullLiteralExpression:
                     return Expression.Constant(null);
                 default:

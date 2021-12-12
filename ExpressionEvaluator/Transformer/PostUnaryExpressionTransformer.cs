@@ -8,18 +8,17 @@ namespace ExpressionEvaluator.Transformer
     {
         public static PostUnaryExpressionTransformer INSTANCE = new PostUnaryExpressionTransformer();
 
-        public UnaryExpression ToExpression(Context context, PostfixUnaryExpressionSyntax prefixSyntax)
+        public UnaryExpression ToExpression(Context context, PostfixUnaryExpressionSyntax postfixSyntax)
         {
-            Expression exp = ExpressionFactory.ToExpression(context, prefixSyntax.Operand);
+            Expression exp = ExpressionFactory.ToExpression(context, postfixSyntax.Operand);
 
-            switch (prefixSyntax.Kind())
+            switch (postfixSyntax.Kind())
             {
                 case SyntaxKind.PostDecrementExpression:
-                    return Expression.PostDecrementAssign(exp);
                 case SyntaxKind.PostIncrementExpression:
-                    return Expression.PostIncrementAssign(exp);
+                    throw new CompilationException("Postfix Increment/Decrement not supported" + postfixSyntax.Operand);
                 default:
-                    throw new CompilationException("Unable to resolve unary expression" + prefixSyntax.Operand);
+                    throw new CompilationException("Unable to resolve unary expression" + postfixSyntax.Operand);
             }
 
         }
