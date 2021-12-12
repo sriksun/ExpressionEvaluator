@@ -27,11 +27,18 @@ namespace ExpressionEvaluator.Transformer
                     }
                     else
                     {
-                        throw new Exception("Unsupported member: " + memberAccessSyntax.Name.Identifier.ValueText);
+                        throw new CompilationException("Unsupported property or field: " + memberAccessSyntax.Name.Identifier.ValueText);
                     }
                 }
             }
-            return Expression.PropertyOrField(ExpressionFactory.ToExpression(context,memberAccessSyntax.Expression), memberAccessSyntax.Name.Identifier.ValueText);
+            try
+            {
+                return Expression.PropertyOrField(ExpressionFactory.ToExpression(context, memberAccessSyntax.Expression), memberAccessSyntax.Name.Identifier.ValueText);
+            }
+            catch (Exception e)
+            {
+                throw new CompilationException("Unsupported property or field: " + memberAccessSyntax.Name.Identifier.ValueText);
+            }
         }
     }
 }

@@ -25,14 +25,23 @@ namespace ExpressionEvaluator.Transformer
             if (type == null)
                 throw new CompilationException(string.Format("The type or namespace name '{0}' could not be found", typeName));
 
-            var constructors = type.GetTypeInfo().DeclaredConstructors;
-            foreach (ConstructorInfo constructor in constructors)
+            Type[] types = new Type[argsLength];
+            for (int i = 0; i < argsLength; i++)
+            {
+                types[i] = arguments[i].Type;
+            }
+            ConstructorInfo constructor = type.GetTypeInfo().GetConstructor(
+                BindingFlags.Instance | BindingFlags.Public, null, types, null);
+            if (constructor != null)
             {
                 try
                 {
                     return Expression.New(constructor, arguments);
                 }
-                catch (System.Exception) { }
+                catch (System.Exception e)
+                {
+                    throw new CompilationException("Unable to create a new expression with this constructor");
+                }
             }
             throw new CompilationException(string.Format("Constructor with specified arguments could not be found on type '{0}'", typeName));
         }
