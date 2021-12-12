@@ -32,13 +32,40 @@ namespace ExpressionEvaluator.Transformer
                 Type type = context.ExportedTypes().FirstOrDefault(v => v.Name == obj);
                 if (type == null)
                 {
-                    var instance = ExpressionFactory.ToExpression(context, ((MemberAccessExpressionSyntax)invoker).Expression);
-                    return Expression.Call(instance, methodName, null, arguments);
+                    Expression instance = ExpressionFactory.ToExpression(context, ((MemberAccessExpressionSyntax)invoker).Expression);
+                    MethodInfo methodInfo = instance.Type.GetMethod(methodName, types);
+                    if (methodInfo != null)
+                    {
+                        try
+                        {
+                            return Expression.Call(instance, methodInfo, arguments);
+                        } catch(Exception)
+                        {
+                            throw new CompilationException("Method doesn't exist " + methodName + " with specific argTypes");
+                        }
+                    }
+                    else
+                    {
+                        throw new CompilationException("Method doesn't exist " + methodName + " with specific argTypes");
+                    }
                 }
                 else
                 {
                     MethodInfo methodInfo = type.GetMethod(methodName, types);
-                    return Expression.Call(methodInfo, arguments);
+                    if (methodInfo != null)
+                    {
+                        try
+                        {
+                            return Expression.Call(methodInfo, arguments);
+                        } catch (Exception)
+                        {
+                            throw new CompilationException("Method doesn't exist " + methodName + " with specific argTypes");
+                        }
+                    }
+                    else
+                    {
+                        throw new CompilationException("Method doesn't exist " + methodName + " with specific argTypes");
+                    }
                 }
             }
             throw new CompilationException("Unsupported Expression " + invocationSyntax.GetText());

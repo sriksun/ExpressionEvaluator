@@ -35,7 +35,7 @@ namespace ExpressionEvaluator.Transformer
             {
                 return Expression.PropertyOrField(ExpressionFactory.ToExpression(context, memberAccessSyntax.Expression), memberAccessSyntax.Name.Identifier.ValueText);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 throw new CompilationException("Unsupported property or field: " + memberAccessSyntax.Name.Identifier.ValueText);
             }

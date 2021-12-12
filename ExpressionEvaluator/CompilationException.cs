@@ -7,11 +7,11 @@ namespace ExpressionEvaluator
         {
         }
 
-		public CompilationException(string? message) : base(message)
+		public CompilationException(string message) : base(message)
         {
         }
 
-        public CompilationException(string? message, Exception? innerException) : base(message, innerException)
+        public CompilationException(string message, Exception innerException) : base(message, innerException)
         {
         }
 

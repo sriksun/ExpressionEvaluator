@@ -55,9 +55,6 @@ namespace ExpressionEvaluator
             Console.WriteLine(v());
 
             Stopwatch watch = Stopwatch.StartNew();
-
-            Console.WriteLine(watch.ElapsedMilliseconds);
-            watch.Restart();
             for (int i = 0; i < 1000000; i++)
             {
                 evaluator.SetVariable("suffix", i.ToString());

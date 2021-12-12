@@ -15,6 +15,10 @@ namespace ExpressionEvaluator.Transformer
             string identifier = identifierSyntax.Identifier.ValueText;
             var param = context.VariableDeclarations().FirstOrDefault(v => v.Name == identifier);
 
+            if (param == null)
+            {
+                throw new CompilationException("Unknown variable " + identifier);
+            }
             Expression argExpression = Expression.Constant(identifier);
             PropertyInfo pInfo = typeof(Dictionary<string, object>).GetProperty("Item", typeof(object));
             Expression expression = Expression.Convert(Expression.Property(Expression.Constant(context.Variables(),

@@ -38,7 +38,7 @@ namespace ExpressionEvaluator.Transformer
                 {
                     return Expression.New(constructor, arguments);
                 }
-                catch (System.Exception e)
+                catch (System.Exception)
                 {
                     throw new CompilationException("Unable to create a new expression with this constructor");
                 }
