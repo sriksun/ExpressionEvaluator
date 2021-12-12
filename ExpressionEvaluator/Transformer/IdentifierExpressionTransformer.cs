@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -20,9 +20,9 @@ namespace ExpressionEvaluator.Transformer
                 throw new CompilationException("Unknown variable " + identifier);
             }
             Expression argExpression = Expression.Constant(identifier);
-            PropertyInfo pInfo = typeof(Dictionary<string, object>).GetProperty("Item", typeof(object));
+            PropertyInfo pInfo = typeof(ConcurrentDictionary<string, object>).GetProperty("Item", typeof(object));
             Expression expression = Expression.Convert(Expression.Property(Expression.Constant(context.Variables(),
-                typeof(Dictionary<string, object>)), pInfo, argExpression), param.Type);
+                typeof(ConcurrentDictionary<string, object>)), pInfo, argExpression), param.Type);
             return expression;
         }
     }

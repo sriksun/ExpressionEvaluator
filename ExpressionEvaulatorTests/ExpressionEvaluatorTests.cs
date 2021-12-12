@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -26,9 +27,9 @@ namespace ExpressionEvaulatorTests
 
             //Let us define Expr(a+2) as Expression(Variables.Item("a") + 2), where Variables is in Context::variableHolder
             Expression argExpression = Expression.Constant("a");
-            PropertyInfo pInfo = typeof(Dictionary<string, object>).GetProperty("Item", typeof(object));
+            PropertyInfo pInfo = typeof(ConcurrentDictionary<string, object>).GetProperty("Item", typeof(object));
             Expression expression = Expression.Convert(Expression.Property(Expression.Constant(context.Variables(),
-                typeof(Dictionary<string, object>)), pInfo, argExpression), typeof(int));
+                typeof(ConcurrentDictionary<string, object>)), pInfo, argExpression), typeof(int));
             expression = Expression.Add(expression, Expression.Constant(2));
 
             cExp = new CompiledExpression(context, Expression.Block(context.VariableDeclarations(), expression));

@@ -72,7 +72,7 @@ namespace ExpressionEvaluator
             context.DeclareVariable("a", typeof(int));
             context.ExportType(typeof(Math));
             context.ExportType(typeof(Int32));
-             cExp = new ExpressionCompiler(context).Compile("Int32.Parse(((Int32)Math.Sqrt(a * a * 1.0)).ToString()) == 5");
+            cExp = new ExpressionCompiler(context).Compile("Int32.Parse(((Int32)Math.Sqrt(a * a * 1.0)).ToString()) == 5");
             evaluator = new ExpressionEvaluator(cExp);
             evaluator.SetVariable("a", 5);
             Func<bool> v1 = evaluator.Evaluate<bool>();
@@ -92,6 +92,14 @@ namespace ExpressionEvaluator
             Func<DateTime> v3 = evaluator.Evaluate<DateTime>();
             Console.WriteLine(v3());
 
+            context = new Context();
+            context.DeclareVariable("a", typeof(int));
+            cExp = new ExpressionCompiler(context).Compile("a+=3");
+            evaluator = new ExpressionEvaluator(cExp);
+            evaluator.SetVariable("a", 5);
+            Func<int> v4 = evaluator.Evaluate<int>();
+            Console.WriteLine(v4());
+            Console.WriteLine(context.Variables()["a"]);
         }
     }
 }

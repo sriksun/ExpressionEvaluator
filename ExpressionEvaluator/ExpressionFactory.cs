@@ -12,8 +12,8 @@ namespace ExpressionEvaluator
             {
                 case LiteralExpressionSyntax literalSyntax:
                     return LiteralExpressionTransformer.INSTANCE.ToExpression(context, literalSyntax);
-                //case AssignmentExpressionSyntax assignmentSyntax:
-                    //return AssignmentExpressionTransformer.INSTANCE.ToExpression(context, assignmentSyntax);
+                case AssignmentExpressionSyntax assignmentSyntax:
+                    return AssignmentExpressionTransformer.INSTANCE.ToExpression(context, assignmentSyntax);
                 case BinaryExpressionSyntax binarySyntax:
                     return BinaryExpressionTransformer.INSTANCE.ToExpression(context, binarySyntax);
                 case InvocationExpressionSyntax invocationSyntax:

@@ -1,43 +1,80 @@
-﻿using System.Linq.Expressions;
+﻿using System.Collections.Concurrent;
+using System.Linq.Expressions;
+using System.Reflection;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ExpressionEvaluator.Transformer
 {
-    public class AssignmentExpressionTransformer : Transformer<BinaryExpression, AssignmentExpressionSyntax>
+    public class AssignmentExpressionTransformer : Transformer<Expression, AssignmentExpressionSyntax>
     {
         public static AssignmentExpressionTransformer INSTANCE = new AssignmentExpressionTransformer();
 
-        public BinaryExpression ToExpression(Context context, AssignmentExpressionSyntax assignmentSyntax)
+        private readonly MethodInfo tryUpdateMethod;
+
+        public AssignmentExpressionTransformer()
+        {
+            tryUpdateMethod = typeof(ConcurrentDictionary<string, object>).GetMethod("TryUpdate");
+        }
+        
+
+        public Expression ToExpression(Context context, AssignmentExpressionSyntax assignmentSyntax)
         {
             Expression lExp = ExpressionFactory.ToExpression(context, assignmentSyntax.Left);
             Expression rExp = ExpressionFactory.ToExpression(context, assignmentSyntax.Right);
 
+            string varName = null;
+            IndexExpression dictionaryAccess = null;
+            if (lExp.NodeType == ExpressionType.Convert)
+            {
+                dictionaryAccess = (IndexExpression)((UnaryExpression)lExp).Operand;
+                varName = ((ConstantExpression)(dictionaryAccess.Arguments[0])).Value.ToString();
+            }
+            if (varName == null)
+            {
+                throw new CompilationException("Can't perform assignment ");
+            }
+            Expression lResult;
             switch (assignmentSyntax.Kind())
             {
                 case SyntaxKind.AddAssignmentExpression:
-                    return Expression.AddAssign(lExp, rExp);
+                    lResult = Expression.Add(lExp, rExp);
+                    break;
                 case SyntaxKind.SubtractAssignmentExpression:
-                    return Expression.SubtractAssign(lExp, rExp);
+                    lResult = Expression.Subtract(lExp, rExp);
+                    break;
                 case SyntaxKind.MultiplyAssignmentExpression:
-                    return Expression.MultiplyAssign(lExp, rExp);
+                    lResult = Expression.Multiply(lExp, rExp);
+                    break;
                 case SyntaxKind.DivideAssignmentExpression:
-                    return Expression.DivideAssign(lExp, rExp);
+                    lResult = Expression.Divide(lExp, rExp);
+                    break;
                 case SyntaxKind.ModuloAssignmentExpression:
-                    return Expression.ModuloAssign(lExp, rExp);
+                    lResult = Expression.Modulo(lExp, rExp);
+                    break;
                 case SyntaxKind.AndAssignmentExpression:
-                    return Expression.AndAssign(lExp, rExp);
+                    lResult = Expression.And(lExp, rExp);
+                    break;
                 case SyntaxKind.OrAssignmentExpression:
-                    return Expression.OrAssign(lExp, rExp);
+                    lResult = Expression.Or(lExp, rExp);
+                    break;
                 case SyntaxKind.ExclusiveOrAssignmentExpression:
-                    return Expression.ExclusiveOrAssign(lExp, rExp);
+                    lResult = Expression.ExclusiveOr(lExp, rExp);
+                    break;
                 case SyntaxKind.LeftShiftAssignmentExpression:
-                    return Expression.LeftShiftAssign(lExp, rExp);
+                    lResult = Expression.LeftShift(lExp, rExp);
+                    break;
                 case SyntaxKind.RightShiftAssignmentExpression:
-                    return Expression.RightShiftAssign(lExp, rExp);
+                    lResult = Expression.RightShift(lExp, rExp);
+                    break;
                 default:
-                    return Expression.Assign(lExp, rExp);
+                    lResult = rExp;
+                    break;
             }
+            Expression lResultObj = Expression.Convert(lResult, typeof(object));
+            return Expression.Block(
+                Expression.Call(Expression.Constant(context.Variables()), tryUpdateMethod, Expression.Constant(varName), lResultObj, dictionaryAccess),
+                lExp);
         }
     }
 }

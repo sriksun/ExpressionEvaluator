@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
@@ -9,7 +10,7 @@ namespace ExpressionEvaluator
     {
         private List<ParameterExpression> variables = new List<ParameterExpression>();
         private List<Type> exportedTypes = new List<Type>();
-        private Dictionary<string, object> variableHolder = new Dictionary<string, object>();
+        private ConcurrentDictionary<string, object> variableHolder = new ConcurrentDictionary<string, object>();
 
         public Context DeclareVariable(string name, Type type)
         {
@@ -58,7 +59,7 @@ namespace ExpressionEvaluator
             return variables;
         }
 
-        public Dictionary<string, object> Variables()
+        public ConcurrentDictionary<string, object> Variables()
         {
             return variableHolder;
         }
