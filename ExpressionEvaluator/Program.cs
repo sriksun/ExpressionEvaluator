@@ -100,6 +100,24 @@ namespace ExpressionEvaluator
             Func<int> v4 = evaluator.Evaluate<int>();
             Console.WriteLine(v4());
             Console.WriteLine(context.Variables()["a"]);
+
+            context = new Context();
+            context.DeclareVariable("a", typeof(int));
+            cExp = new ExpressionCompiler(context).Compile("a++");
+            evaluator = new ExpressionEvaluator(cExp);
+            evaluator.SetVariable("a", 5);
+            Func<int> v5 = evaluator.Evaluate<int>();
+            Console.WriteLine(v5());
+            Console.WriteLine(context.Variables()["a"]);
+
+            context = new Context();
+            context.DeclareVariable("a", typeof(int));
+            cExp = new ExpressionCompiler(context).Compile("++a");
+            evaluator = new ExpressionEvaluator(cExp);
+            evaluator.SetVariable("a", 5);
+            Func<int> v6 = evaluator.Evaluate<int>();
+            Console.WriteLine(v6());
+            Console.WriteLine(context.Variables()["a"]);
         }
     }
 }

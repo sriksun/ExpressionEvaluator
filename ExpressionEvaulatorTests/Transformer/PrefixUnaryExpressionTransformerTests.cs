@@ -13,7 +13,7 @@ namespace ExpressionEvaulatorTests.Transformer
     public class PrefixUnaryExpressionTransformerTests
     {
         [Test]
-        public void TestPrefix()
+        public void TestPrefixDecrement()
         {
             var tree = CSharpSyntaxTree.ParseText("--a", CSharpParseOptions.Default.WithKind(SourceCodeKind.Script));
             PrefixUnaryExpressionSyntax prefixSyntax = tree
@@ -24,16 +24,26 @@ namespace ExpressionEvaulatorTests.Transformer
 
             Context context = new Context();
             context.DeclareVariable("a", typeof(int));
-            try
-            {
-                UnaryExpression cExp = PrefixUnaryExpressionTransformer.INSTANCE.ToExpression(context, prefixSyntax);
-            }
-            catch (Exception e)
-            {
-                Assert.AreEqual(e.GetType(), typeof(CompilationException));
-                return;
-            }
-            Assert.Fail();
+            Expression cExp = PrefixUnaryExpressionTransformer.INSTANCE.ToExpression(context, prefixSyntax);
+            Assert.AreEqual(cExp.NodeType, ExpressionType.Block);
+            Assert.AreEqual(cExp.Type, typeof(int));
+        }
+
+        [Test]
+        public void TestPrefixIncrement()
+        {
+            var tree = CSharpSyntaxTree.ParseText("++a", CSharpParseOptions.Default.WithKind(SourceCodeKind.Script));
+            PrefixUnaryExpressionSyntax prefixSyntax = tree
+                .GetRoot()
+                .DescendantNodes()
+                .OfType<PrefixUnaryExpressionSyntax>()
+                .First();
+
+            Context context = new Context();
+            context.DeclareVariable("a", typeof(int));
+            Expression cExp = PrefixUnaryExpressionTransformer.INSTANCE.ToExpression(context, prefixSyntax);
+            Assert.AreEqual(cExp.NodeType, ExpressionType.Block);
+            Assert.AreEqual(cExp.Type, typeof(int));
         }
 
         [Test]
@@ -47,7 +57,7 @@ namespace ExpressionEvaulatorTests.Transformer
                 .First();
 
             Context context = new Context();
-            UnaryExpression cExp = PrefixUnaryExpressionTransformer.INSTANCE.ToExpression(context, prefixSyntax);
+            UnaryExpression cExp = (UnaryExpression)PrefixUnaryExpressionTransformer.INSTANCE.ToExpression(context, prefixSyntax);
             Assert.AreEqual(cExp.NodeType, ExpressionType.Negate);
             Assert.AreEqual(((ConstantExpression)cExp.Operand).Value, 5);
             Assert.AreEqual(cExp.Type, typeof(int));
@@ -64,7 +74,7 @@ namespace ExpressionEvaulatorTests.Transformer
                 .First();
 
             Context context = new Context();
-            UnaryExpression cExp = PrefixUnaryExpressionTransformer.INSTANCE.ToExpression(context, prefixSyntax);
+            UnaryExpression cExp = (UnaryExpression)PrefixUnaryExpressionTransformer.INSTANCE.ToExpression(context, prefixSyntax);
             Assert.AreEqual(cExp.NodeType, ExpressionType.Not);
             Assert.AreEqual(((ConstantExpression)cExp.Operand).Value, 7);
             Assert.AreEqual(cExp.Type, typeof(int));
@@ -81,7 +91,7 @@ namespace ExpressionEvaulatorTests.Transformer
                 .First();
 
             Context context = new Context();
-            UnaryExpression cExp = PrefixUnaryExpressionTransformer.INSTANCE.ToExpression(context, prefixSyntax);
+            UnaryExpression cExp = (UnaryExpression)PrefixUnaryExpressionTransformer.INSTANCE.ToExpression(context, prefixSyntax);
             Assert.AreEqual(cExp.NodeType, ExpressionType.Not);
             Assert.AreEqual(((ConstantExpression)cExp.Operand).Value, true);
             Assert.AreEqual(cExp.Type, typeof(bool));

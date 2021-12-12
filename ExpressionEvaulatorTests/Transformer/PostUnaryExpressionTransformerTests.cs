@@ -13,7 +13,24 @@ namespace ExpressionEvaulatorTests.Transformer
     public class PostUnaryExpressionTransformerTests
     {
         [Test]
-        public void TestPostfix()
+        public void TestPostfixDecrement()
+        {
+            var tree = CSharpSyntaxTree.ParseText("a--", CSharpParseOptions.Default.WithKind(SourceCodeKind.Script));
+            PostfixUnaryExpressionSyntax postfixSyntax = tree
+                .GetRoot()
+                .DescendantNodes()
+                .OfType<PostfixUnaryExpressionSyntax>()
+                .First();
+
+            Context context = new Context();
+            context.DeclareVariable("a", typeof(int));
+            Expression cExp = PostUnaryExpressionTransformer.INSTANCE.ToExpression(context, postfixSyntax);
+            Assert.AreEqual(cExp.NodeType, ExpressionType.Block);
+            Assert.AreEqual(cExp.Type, typeof(int));
+        }
+
+        [Test]
+        public void TestPostfixIncrement()
         {
             var tree = CSharpSyntaxTree.ParseText("a++", CSharpParseOptions.Default.WithKind(SourceCodeKind.Script));
             PostfixUnaryExpressionSyntax postfixSyntax = tree
@@ -24,17 +41,9 @@ namespace ExpressionEvaulatorTests.Transformer
 
             Context context = new Context();
             context.DeclareVariable("a", typeof(int));
-            try
-            {
-                UnaryExpression cExp = PostUnaryExpressionTransformer.INSTANCE.ToExpression(context, postfixSyntax);
-            }
-            catch (Exception e)
-            {
-                Assert.AreEqual(e.GetType(), typeof(CompilationException));
-                return;
-            }
-            Assert.Fail();
+            Expression cExp = PostUnaryExpressionTransformer.INSTANCE.ToExpression(context, postfixSyntax);
+            Assert.AreEqual(cExp.NodeType, ExpressionType.Block);
+            Assert.AreEqual(cExp.Type, typeof(int));
         }
-
     }
 }
