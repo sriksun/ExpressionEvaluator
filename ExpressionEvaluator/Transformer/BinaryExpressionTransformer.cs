@@ -24,8 +24,8 @@ namespace ExpressionEvaluator.Transformer
         {
             Expression lExp = ExpressionFactory.ToExpression(context, binarySyntax.Left);
             Expression rExp = ExpressionFactory.ToExpression(context, binarySyntax.Right);
-            int lTypePrio = priority[lExp.Type];
-            int rTypePrio = priority[rExp.Type];
+            int lTypePrio = priority.ContainsKey(lExp.Type) ? priority[lExp.Type] : 0;
+            int rTypePrio = priority.ContainsKey(rExp.Type) ? priority[rExp.Type] : 0;
 
             if (lTypePrio > 0 && rTypePrio > 0 & lTypePrio != rTypePrio)
             {
@@ -64,9 +64,11 @@ namespace ExpressionEvaluator.Transformer
                 case SyntaxKind.GreaterThanOrEqualExpression:
                     return Expression.GreaterThanOrEqual(lExp, rExp);
                 case SyntaxKind.LogicalAndExpression:
-                    return Expression.And(lExp, rExp);
+                    Expression rhs0 = ((lTypePrio + rTypePrio) > 0 ? Expression.Constant(0) : Expression.Constant(true));
+                    return Expression.NotEqual(Expression.And(lExp, rExp), rhs0);
                 case SyntaxKind.LogicalOrExpression:
-                    return Expression.Or(lExp, rExp);
+                    Expression rhs1 = ((lTypePrio + rTypePrio) > 0 ? Expression.Constant(0) : Expression.Constant(true));
+                    return Expression.NotEqual(Expression.Or(lExp, rExp), rhs1);
                 case SyntaxKind.CoalesceExpression:
                     return Expression.Coalesce(lExp, rExp);
                 case SyntaxKind.BitwiseAndExpression:
