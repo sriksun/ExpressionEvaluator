@@ -21,7 +21,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
-using ExpressionEvaluator;
+using ExpEval;
 using NUnit.Framework;
 
 namespace ExpressionEvaulatorTests
@@ -32,16 +32,11 @@ namespace ExpressionEvaulatorTests
         public void TestExpressionEvaluator()
         {
             Context context = new Context();
-            CompiledExpression cExp = new CompiledExpression(context, Expression.Constant(5));
-            ExpressionEvaluator.ExpressionEvaluator evaluator = new ExpressionEvaluator.ExpressionEvaluator(cExp);
-            Func<int> l = evaluator.Evaluate<int>();
-            Assert.AreEqual(l(), 5);
+            CompiledExpression<int> cExp = new CompiledExpression<int>(context, EvaluateImpl<Func<int>>(Expression.Constant(5)));
+            ExpressionEvaluator<int> evaluator = new ExpressionEvaluator<int>(cExp);
+            int l = evaluator.Evaluate();
+            Assert.AreEqual(l, 5);
 
-            context.DeclareVariable("a", typeof(int));
-            cExp = new CompiledExpression(context, Expression.Constant(5));
-            evaluator = new ExpressionEvaluator.ExpressionEvaluator(cExp);
-            evaluator.SetVariable("a", 5);
-            Assert.AreEqual(context.Variables()["a"], 5);
 
             //Let us define Expr(a+2) as Expression(Variables.Item("a") + 2), where Variables is in Context::variableHolder
             Expression argExpression = Expression.Constant("a");
@@ -50,10 +45,18 @@ namespace ExpressionEvaulatorTests
                 typeof(ConcurrentDictionary<string, object>)), pInfo, argExpression), typeof(int));
             expression = Expression.Add(expression, Expression.Constant(2));
 
-            cExp = new CompiledExpression(context, Expression.Block(context.VariableDeclarations(), expression));
-            evaluator = new ExpressionEvaluator.ExpressionEvaluator(cExp);
-            l = evaluator.Evaluate<int>();
-            Assert.AreEqual(l(), 7);
+            cExp = new CompiledExpression<int>(context, EvaluateImpl<Func<int>>(Expression.Block(context.VariableDeclarations(), expression)));
+            evaluator = new ExpressionEvaluator<int>(cExp);
+            l = evaluator.Evaluate(new Dictionary<string, object>() { { "a", 5 } });
+            Assert.AreEqual(l, 7);
         }
+
+        private T EvaluateImpl<T>(Expression expression)
+        {
+            Expression<T> exp = Expression.Lambda<T>(expression);
+            T val = exp.Compile();
+            return val;
+        }
+
     }
 }

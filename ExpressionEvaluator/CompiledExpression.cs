@@ -16,29 +16,30 @@
 * limitations under the License.
 */
 
+using System;
 using System.Linq.Expressions;
 
-namespace ExpressionEvaluator
+namespace ExpEval
 {
     /// <summary>
     /// Holds internal state of a compiled expression. Only a compiled
     /// expression can be evaluated. ExpressionCompiler <see cref="ExpressionCompiler.Compile(string)"/>
     /// is used to build a CompiledExpression object used for evalutation.
     /// </summary>
-    public class CompiledExpression
+    public class CompiledExpression<T>
     {
         private readonly Context context;
-        private readonly Expression expression;
+        private readonly Func<T> funcHandle;
 
-        public CompiledExpression(Context context, Expression expression)
+        public CompiledExpression(Context context, Func<T> funcHandle)
         {
             this.context = context;
-            this.expression = expression;
+            this.funcHandle = funcHandle;
         }
 
-        public Expression Expression()
+        public Func<T> FunctionDelegate()
         {
-            return expression;
+            return funcHandle;
         }
 
         public Context Context()

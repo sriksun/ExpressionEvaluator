@@ -21,7 +21,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace ExpressionEvaluator.Transformer
+namespace ExpEval.Transformer
 {
     public class CastExpressionTransformer : IExpressionTransformer<Expression, CastExpressionSyntax>
     {

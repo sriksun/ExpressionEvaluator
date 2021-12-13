@@ -17,7 +17,7 @@
 */
 
 using System;
-namespace ExpressionEvaluator
+namespace ExpEval
 {
     /// <summary>
     /// Exception encountered during compilation of script being evaluated.

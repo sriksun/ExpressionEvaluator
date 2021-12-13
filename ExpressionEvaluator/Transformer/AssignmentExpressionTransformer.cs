@@ -22,7 +22,7 @@ using System.Reflection;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace ExpressionEvaluator.Transformer
+namespace ExpEval.Transformer
 {
     public class AssignmentExpressionTransformer : IExpressionTransformer<Expression, AssignmentExpressionSyntax>
     {

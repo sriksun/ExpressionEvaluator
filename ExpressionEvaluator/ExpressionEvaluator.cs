@@ -20,7 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace ExpressionEvaluator
+namespace ExpEval
 {
     /// <summary>
     /// ExpressionEvaluator evaluates simple expressions in a performant fashion.
@@ -37,36 +37,26 @@ namespace ExpressionEvaluator
     /// </code>
     /// Note: ExpressionEvalution is not thread-safe.
     /// </summary>
-    public class ExpressionEvaluator
+    public class ExpressionEvaluator<T>
     {
         private readonly Context context;
-        private readonly Expression expression;
+        private readonly Func<T> funcHandle;
 
-        public ExpressionEvaluator(CompiledExpression cExp)
+        public ExpressionEvaluator(CompiledExpression<T> cExp)
         {
             this.context = cExp.Context();
-            this.expression = cExp.Expression();
+            this.funcHandle = cExp.FunctionDelegate();
         }
 
-        public ExpressionEvaluator SetVariable(string name, object val)
+        public T Evaluate()
         {
-            context.SetVariable(name, val);
-            return this;
+            return funcHandle();
         }
 
-        public ExpressionEvaluator SetVariables(Dictionary<string, object> variables)
+        public T Evaluate(Dictionary<string, object> variables)
         {
             context.SetVariables(variables);
-            return this;
+            return funcHandle();
         }
-
-        private T EvaluateImpl<T>()
-        {
-            Expression<T> exp = Expression.Lambda<T>(expression);
-            T val = exp.Compile();
-            return val;
-        }
-
-        public Func<T> Evaluate<T>() => EvaluateImpl<Func<T>>();
     }
 }

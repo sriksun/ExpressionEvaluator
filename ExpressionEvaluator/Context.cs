@@ -22,7 +22,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace ExpressionEvaluator
+namespace ExpEval
 {
     /// <summary>
     /// Expression evaluation state through which variable declaration and

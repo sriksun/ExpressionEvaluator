@@ -16,8 +16,9 @@
 * limitations under the License.
 */
 
+using System;
 using System.Linq.Expressions;
-using ExpressionEvaluator;
+using ExpEval;
 using NUnit.Framework;
 
 namespace ExpressionEvaulatorTests
@@ -28,10 +29,10 @@ namespace ExpressionEvaulatorTests
         public void TestCompiledExpression()
         {
             Context context = new Context();
-            ConstantExpression exp = Expression.Constant(5);
-            CompiledExpression cExp = new CompiledExpression(context, exp);
+            Func<int> funcHandle = () => { return 5; };
+            CompiledExpression<int> cExp = new CompiledExpression<int>(context, funcHandle);
             Assert.AreEqual(context, cExp.Context());
-            Assert.AreEqual(exp, cExp.Expression());
+            Assert.AreEqual(funcHandle, cExp.FunctionDelegate());
         }
     }
 }

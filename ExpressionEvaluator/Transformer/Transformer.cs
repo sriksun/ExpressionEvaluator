@@ -19,7 +19,7 @@
 using System.Linq.Expressions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace ExpressionEvaluator.Transformer
+namespace ExpEval.Transformer
 {
     /// <summary>
     /// Transforms a Roslyn CSharp Expression Syntax <see cref="ExpressionSyntax"/> to

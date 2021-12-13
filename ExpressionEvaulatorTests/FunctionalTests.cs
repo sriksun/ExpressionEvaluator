@@ -17,7 +17,8 @@
 */
 
 using System;
-using ExpressionEvaluator;
+using System.Collections.Generic;
+using ExpEval;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 
@@ -87,11 +88,10 @@ namespace ExpressionEvaulatorTests
             context.DeclareVariable("a", typeof(int));
             context.ExportType(typeof(Int16));
             context.ExportType(typeof(Int32));
-            CompiledExpression cExp = new ExpressionCompiler(context).Compile(expression);
-            ExpressionEvaluator.ExpressionEvaluator evaluator = new ExpressionEvaluator.ExpressionEvaluator(cExp);
-            evaluator.SetVariable("a", initValue);
-            Func<int> evalFunc = evaluator.Evaluate<int>();
-            Assert.AreEqual(evalFunc(), expectedValue);
+            CompiledExpression<int> cExp = new ExpressionCompiler(context).Compile<int>(expression);
+            ExpressionEvaluator<int> evaluator = new ExpressionEvaluator<int>(cExp);
+            int val = evaluator.Evaluate(new Dictionary<string, object>() { { "a", initValue} });
+            Assert.AreEqual(val, expectedValue);
             Assert.AreEqual(context.Variables()["a"], expectedVarValue);
         }
 
@@ -101,11 +101,10 @@ namespace ExpressionEvaulatorTests
             Context context = new Context();
             context.DeclareVariable("a", typeof(int));
             context.ExportType(typeof(Int16));
-            CompiledExpression cExp = new ExpressionCompiler(context).Compile(expression);
-            ExpressionEvaluator.ExpressionEvaluator evaluator = new ExpressionEvaluator.ExpressionEvaluator(cExp);
-            evaluator.SetVariable("a", initValue);
-            Func<bool> evalFunc = evaluator.Evaluate<bool>();
-            Assert.AreEqual(evalFunc(), expectedValue);
+            CompiledExpression<bool> cExp = new ExpressionCompiler(context).Compile<bool>(expression);
+            ExpressionEvaluator<bool> evaluator = new ExpressionEvaluator<bool>(cExp);
+            bool val = evaluator.Evaluate(new Dictionary<string, object>() { { "a", initValue } });
+            Assert.AreEqual(val, expectedValue);
             Assert.AreEqual(context.Variables()["a"], expectedVarValue);
         }
 
@@ -116,11 +115,10 @@ namespace ExpressionEvaulatorTests
             context.DeclareVariable("a", typeof(DateTime));
             context.ExportType(typeof(DateTime));
             context.ExportType(typeof(Int64));
-            CompiledExpression cExp = new ExpressionCompiler(context).Compile(expression);
-            ExpressionEvaluator.ExpressionEvaluator evaluator = new ExpressionEvaluator.ExpressionEvaluator(cExp);
-            evaluator.SetVariable("a", initValue);
-            Func<DateTime> evalFunc = evaluator.Evaluate<DateTime>();
-            Assert.AreEqual(evalFunc(), expectedValue);
+            CompiledExpression<DateTime> cExp = new ExpressionCompiler(context).Compile<DateTime>(expression);
+            ExpressionEvaluator<DateTime> evaluator = new ExpressionEvaluator<DateTime>(cExp);
+            DateTime val = evaluator.Evaluate(new Dictionary<string, object>() { { "a", initValue } });
+            Assert.AreEqual(val, expectedValue);
             Assert.AreEqual(context.Variables()["a"], expectedVarValue);
         }
 
@@ -161,21 +159,24 @@ namespace ExpressionEvaulatorTests
             context.DeclareVariable("obj", typeof(JObject));
             context.DeclareVariable("suffix", typeof(string));
             context.ExportType(typeof(String));
-            CompiledExpression cExp = new ExpressionCompiler(context).Compile("String.Concat(obj[\"channel\"][\"item\"][0][\"title\"].ToString().Substring(0,8), suffix)");
-            ExpressionEvaluator.ExpressionEvaluator evaluator = new ExpressionEvaluator.ExpressionEvaluator(cExp);
-            evaluator.SetVariable("obj", json).SetVariable("suffix", "Custom");
-            Func<string> evalFunc1 = evaluator.Evaluate<string>();
-            Assert.AreEqual(evalFunc1(), "Title 1 Custom");
+            CompiledExpression<string> cExp = new ExpressionCompiler(context).Compile<string>("String.Concat(obj[\"channel\"][\"item\"][0][\"title\"].ToString().Substring(0,8), suffix)");
+            ExpressionEvaluator<string> evaluator = new ExpressionEvaluator<string>(cExp);
+            Dictionary<string, object> vars = new Dictionary<string, object>()
+            {
+                { "obj", json },
+                { "suffix", "Custom" }
+            };
+            string val1 = evaluator.Evaluate(vars);
+            Assert.AreEqual(val1, "Title 1 Custom");
 
             context = new Context();
             context.DeclareVariable("a", typeof(int));
             context.ExportType(typeof(Math));
             context.ExportType(typeof(Int32));
-            cExp = new ExpressionCompiler(context).Compile("Int32.Parse(((Int32)Math.Sqrt(a * a * 1.0)).ToString()) == 5");
-            evaluator = new ExpressionEvaluator.ExpressionEvaluator(cExp);
-            evaluator.SetVariable("a", 5);
-            Func<bool> evalFunc2 = evaluator.Evaluate<bool>();
-            Assert.AreEqual(evalFunc2(), true);
+            CompiledExpression<bool> cExpBool = new ExpressionCompiler(context).Compile<bool>("Int32.Parse(((Int32)Math.Sqrt(a * a * 1.0)).ToString()) == 5");
+            ExpressionEvaluator<bool> evaluatorBool = new ExpressionEvaluator<bool>(cExpBool);
+            bool val2 = evaluatorBool.Evaluate(new Dictionary<string, object>() { { "a", 5} });
+            Assert.AreEqual(val2, true);
         }
     }
 }

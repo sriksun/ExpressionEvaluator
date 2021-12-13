@@ -17,8 +17,9 @@
 */
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
-using ExpressionEvaluator;
+using ExpEval;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 
@@ -64,17 +65,15 @@ namespace ExpressionEvaulatorTests
             context.DeclareVariable("obj", typeof(JObject));
             context.DeclareVariable("suffix", typeof(string));
             context.ExportType(typeof(String));
-            CompiledExpression cExp = new ExpressionCompiler(context).Compile("String.Concat(obj[\"channel\"][\"item\"][0][\"title\"].ToString().Substring(0,8), suffix)");
-            ExpressionEvaluator.ExpressionEvaluator evaluator = new ExpressionEvaluator.ExpressionEvaluator(cExp);
-            evaluator.SetVariable("obj", json).SetVariable("suffix", "Custom");
-            Func<string> evalFunc1 = evaluator.Evaluate<string>();
-            Assert.AreEqual(evalFunc1(), "Title 1 Custom");
+            CompiledExpression<string> cExp = new ExpressionCompiler(context).Compile<string>("String.Concat(obj[\"channel\"][\"item\"][0][\"title\"].ToString().Substring(0,8), suffix)");
+            ExpressionEvaluator<string> evaluator = new ExpressionEvaluator<string>(cExp);
+            string val1 = evaluator.Evaluate(new Dictionary<string, object>() { { "obj", json }, { "suffix", "Custom" } });
+            Assert.AreEqual(val1, "Title 1 Custom");
 
             Stopwatch watch = Stopwatch.StartNew();
             for (int i = 0; i < 1000000; i++)
             {
-                evaluator.SetVariable("suffix", i.ToString());
-                evalFunc1();
+                evaluator.Evaluate(new Dictionary<string, object>() { { "obj", json }, { "suffix", i.ToString() } });
             }
             long expTime = watch.ElapsedMilliseconds;
             watch.Restart();

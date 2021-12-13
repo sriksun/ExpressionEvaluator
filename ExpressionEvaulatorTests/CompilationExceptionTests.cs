@@ -17,7 +17,7 @@
 */
 
 using System;
-using ExpressionEvaluator;
+using ExpEval;
 using NUnit.Framework;
 
 namespace ExpressionEvaulatorTests

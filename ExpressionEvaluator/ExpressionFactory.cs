@@ -17,10 +17,10 @@
 */
 
 using System.Linq.Expressions;
-using ExpressionEvaluator.Transformer;
+using ExpEval.Transformer;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace ExpressionEvaluator
+namespace ExpEval
 {
     public class ExpressionFactory
     {

@@ -19,8 +19,8 @@
 using System;
 using System.Linq;
 using System.Linq.Expressions;
-using ExpressionEvaluator;
-using ExpressionEvaluator.Transformer;
+using ExpEval;
+using ExpEval.Transformer;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;

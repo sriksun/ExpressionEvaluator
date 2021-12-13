@@ -17,8 +17,9 @@
 */
 
 using System;
+using System.Collections.Generic;
 
-namespace ExpressionEvaluator
+namespace ExpEval
 {
     class Program
     {
@@ -26,11 +27,11 @@ namespace ExpressionEvaluator
         {
             Context context = new Context();
             context.DeclareVariable("a", typeof(int));
-            CompiledExpression cExp = new ExpressionCompiler(context).Compile("a+=3");
-            ExpressionEvaluator evaluator = new ExpressionEvaluator(cExp);
-            evaluator.SetVariable("a", 5);
-            Func<int> func = evaluator.Evaluate<int>();
-            Console.WriteLine(func());
+            CompiledExpression<int> cExp = new ExpressionCompiler(context).Compile<int>("a+=3");
+            ExpressionEvaluator<int> evaluator = new ExpressionEvaluator<int>(cExp);
+            
+            int val = evaluator.Evaluate(new Dictionary<string, object>() { { "a", 5} });
+            Console.WriteLine(val);
             Console.WriteLine(context.Variables()["a"]);
         }
     }

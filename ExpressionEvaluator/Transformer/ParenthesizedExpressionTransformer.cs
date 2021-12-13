@@ -19,7 +19,7 @@
 using System.Linq.Expressions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace ExpressionEvaluator.Transformer
+namespace ExpEval.Transformer
 {
     public class ParenthesizedExpressionTransformer : IExpressionTransformer<Expression, ParenthesizedExpressionSyntax>
     {

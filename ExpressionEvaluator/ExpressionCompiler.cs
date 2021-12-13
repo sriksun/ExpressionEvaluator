@@ -23,7 +23,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace ExpressionEvaluator
+namespace ExpEval
 {
     /// <summary>
     /// Compiles an expression and returns a handle to CompiledExpression
@@ -53,7 +53,7 @@ namespace ExpressionEvaluator
             return tree;
         }
 
-        public CompiledExpression Compile(string expression)
+        public CompiledExpression<T> Compile<T>(string expression)
         {
             ExpressionStatementSyntax expr = ValidateExpression(expression)
                 .GetRoot()
@@ -62,11 +62,20 @@ namespace ExpressionEvaluator
                 .First();
 
             Expression exp = ExpressionFactory.ToExpression(context, expr.ChildNodes().OfType<ExpressionSyntax>().First());
-
-            return new CompiledExpression(context, Expression.Block(
+            Expression blockExpression = Expression.Block(
                 context.VariableDeclarations(),
                 exp
-            ));
+            );
+            Func<T> funcHandle = EvaluateImpl<Func<T>>(blockExpression);
+            return new CompiledExpression<T>(context, funcHandle);
         }
+
+        private T EvaluateImpl<T>(Expression expression)
+        {
+            Expression<T> exp = Expression.Lambda<T>(expression);
+            T val = exp.Compile();
+            return val;
+        }
+
     }
 }
